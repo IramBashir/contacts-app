@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { Provider } from 'react-redux';
+import store from './redux/store';
+import ContactForm from './components/ContactForm';
+import ContactList from './components/ContactList';
+import SearchBar from './components/SearchBar';
+import { Container, Typography } from '@material-ui/core';
 
 function App() {
+  const [selectedContact, setSelectedContact] = useState(null);
+
+  const handleEditContact = (contact) => {
+    setSelectedContact(contact);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Container style={{ marginTop: '20px' }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Contactly - Contacts App
+        </Typography>
+
+        {/* Search Bar */}
+        <SearchBar />
+
+        {/* Contact Form */}
+        <ContactForm currentContact={selectedContact} />
+
+        {/* Contacts List */}
+        <ContactList onEdit={handleEditContact} />
+      </Container>
+    </Provider>
   );
 }
 
