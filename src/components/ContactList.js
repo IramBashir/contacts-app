@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Typography, Paper } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { editContact, deleteContact } from '../redux/actions/contactActions';
+import { deleteContact } from '../redux/actions/contactActions';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,7 +14,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 
 
-const ContactList = ({ onEdit }) => {
+const ContactList = ({ setCurrentContact }) => {
 
     const contacts = useSelector((state) => 
         state.contacts.filteredContacts.length 
@@ -28,16 +28,9 @@ const ContactList = ({ onEdit }) => {
     const dispatch = useDispatch();
 
     const handleEdit = (contact) => {
-        onEdit(contact);
+        setCurrentContact(contact);
     };
-
-    const handleDelete = (id) => {
-        // For now, we'll simply filter out the contact. However, this isn't persistent.
-        // In a more complete application, you'd want to handle this in your Redux store.
-        const updatedContacts = contacts.filter((contact) => contact.id !== id);
-        dispatch(editContact(updatedContacts));
-    };
-
+    
     const handleDeleteDialog = (id) => {
         setContactToDelete(id);
         setDialogOpen(true);
@@ -66,9 +59,6 @@ const ContactList = ({ onEdit }) => {
                     <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(contact)}>
                         <EditIcon />
                     </IconButton>
-                    {/* <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(contact.id)}>
-                        <DeleteIcon />
-                    </IconButton> */}
                     <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteDialog(contact.id)}>
                         <DeleteIcon />
                     </IconButton>

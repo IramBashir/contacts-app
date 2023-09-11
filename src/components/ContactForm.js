@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Paper, Typography, makeStyles } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { addContact, editContact } from '../redux/actions/contactActions';
-import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -18,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-const ContactForm = ({ currentContact = null }) => {
+const ContactForm = ({ currentContact = null, setCurrentContact }) => {
     
   const classes = useStyles();
   const [contact, setContact] = useState({
@@ -30,25 +29,32 @@ const ContactForm = ({ currentContact = null }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('currentContact', currentContact)
     if (currentContact) {
       setContact(currentContact);
     }
   }, [currentContact]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (currentContact) {
-      dispatch(editContact(contact.id, contact));
-    } else {
-      dispatch(addContact(contact));
-      // Reset the form after adding
-      setContact({
-        id: Date.now(),
-        name: '',
-        contactNumber: '',
-      });
-    }
-  };
+  const resetForm = () => {
+        setContact({
+            id: Date.now(),
+            name: '',
+            contactNumber: '',
+        });
+        if (setCurrentContact) setCurrentContact(null);  // reset currentContact to null
+    };
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (currentContact) {
+            dispatch(editContact(contact.id, contact));
+            resetForm(); // Resetting after updating
+        } else {
+            dispatch(addContact(contact));
+            resetForm(); // Resetting after adding
+        }
+    };
 
   return (
     <Paper style={{ padding: '20px', margin: '20px' }}>
@@ -78,9 +84,24 @@ const ContactForm = ({ currentContact = null }) => {
           />
         </div>
 
-        <Button variant="contained" color="primary" type="submit">
-          {currentContact ? 'Update' : 'Add'}
-        </Button>
+        {currentContact ? (
+            <>
+                <Button variant="contained" color="primary" type="submit" className={classes.submitButton} >
+                    Update
+                </Button>
+                <Button
+                    variant="contained"
+                    style={{ marginLeft: '10px', marginTop: '16px' }}
+                    onClick={resetForm}
+                >
+                    Cancel
+                </Button>
+            </>
+        ) : (
+            <Button variant="contained" color="primary" type="submit" className={classes.submitButton}>
+                Add
+            </Button>
+        )}
       </form>
     </Paper>
   );

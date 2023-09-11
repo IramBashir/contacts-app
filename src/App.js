@@ -7,10 +7,12 @@ import SearchBar from './components/SearchBar';
 import { Container, Typography } from '@material-ui/core';
 
 function App() {
+  const [currentContact, setCurrentContact] = useState(null);
   const [selectedContact, setSelectedContact] = useState(null);
 
   const handleEditContact = (contact) => {
     setSelectedContact(contact);
+    console.log('in app: ', contact)
   };
 
   return (
@@ -24,10 +26,10 @@ function App() {
         <SearchBar />
 
         {/* Contact Form */}
-        <ContactForm currentContact={selectedContact} />
+        <ContactForm currentContact={currentContact} setCurrentContact={setCurrentContact} />
 
         {/* Contacts List */}
-        <ContactList onEdit={handleEditContact} />
+        <ContactList setCurrentContact={setCurrentContact} />
       </Container>
     </Provider>
   );
