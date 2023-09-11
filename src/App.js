@@ -8,12 +8,6 @@ import { Container, Typography } from '@material-ui/core';
 
 function App() {
   const [currentContact, setCurrentContact] = useState(null);
-  const [selectedContact, setSelectedContact] = useState(null);
-
-  const handleEditContact = (contact) => {
-    setSelectedContact(contact);
-    console.log('in app: ', contact)
-  };
 
   return (
     <Provider store={store}>

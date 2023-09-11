@@ -29,7 +29,6 @@ const ContactForm = ({ currentContact = null, setCurrentContact }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('currentContact', currentContact)
     if (currentContact) {
       setContact(currentContact);
     }
