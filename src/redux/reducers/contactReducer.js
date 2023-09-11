@@ -22,8 +22,13 @@ const initialState = {
             ...state,
             filteredContacts: []
         };
+    case "DELETE_CONTACT":
+        return {
+            ...state,
+            contacts: state.contacts.filter(contact => String(contact.id) !== String(action.payload))
+        };
     default:
-    return state;
+        return state;
     }
   };
   
